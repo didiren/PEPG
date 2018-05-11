@@ -16,4 +16,4 @@ The last step is to run the PEPG.py, which is designed  to compare the prior ann
 
 # MAKER2-two-pass genome annotation pipeline's description was listed in the MAKER2-two-pass pipeline.pdf file in destails if you want to re-annotate your genome with the RNA-seq evidence and updated protein evidence. 
 
-# The reference genome based transcriptome assemble pipeline of RNA-seq reads can be found in https://github.com/didiren/transcriptome-comparison
+# The reference genome based transcriptome assemble pipeline of RNA-seq reads can be found in https://github.com/didiren/transcriptome_assembly.git
