@@ -1,9 +1,13 @@
 # PEPG
-The first step is the MAKER2-Legacy-Annotation.
-1	Adding MAKER2’s Quality metrics to Preexisting Annotation
+The first step is the MAKER2-Legacy-Annotation to add AED Quality metrics to the prior Annotation
+
+
 1.1	Description
+
 With all new RNA and Protein homology evidence, MAKER2 offers a way to accomplish measuring the quality of gene prediction from any preexisting annotation by adding the same quality metrics, like Annotation Edit Distance (AED) and mRNA Quality index (QI). AED is a number between 0 and 1, with an AED score of 0 indicating a perfect prediction with available evidence and a value of 1 without any evidence supporting the annotated gene model. A preexisting annotation file in GFF3 format and the same kinds of evidence we used above for consistency were used here.
+
 1.2	Running MAKER2-Legacy 
+
 With the same strategy like normal MAKER2 one-pass, we need to edit the three control files for MAKER2 to get access to the genome, RNA, Proteins evidence. However, there is no need to utilize any gene predictor because preexisting annotation provided gene models for MAKER2 to exam with the evidence it has.
 
 1.2.1	Editing three control files
@@ -18,9 +22,8 @@ est2genome=0
 protein2genome=0
 
 
-# Options I used for MAKER2 HERE:
-#genome
-to give genome sequences
+The option description here:
+#genome---to give genome sequences
 #organism_type           
 to indicate the type of organism
 #est                
@@ -101,40 +104,4 @@ qsub maker_combine1.sh
 In a GFF3 format file, there are 9 columns, containing seqid, source, type, start, end, score, strand, phase and attributes, separately. In the ninth column, gene ID, gene name, AED score, etc were presented by a semicolon-separated list. A R script were written to extract AED score using regulator expression function as followed.
 
 
-  #In R studio, create a AEDscore function to extract AED values from each gene.
-
-  AEDscore <- function(gfffile){
-  #obtain maker.gff file to see how many genes it has and their AED scores
-  maker.gff <- read.table(gfffile,sep='\t')
-  #only extract the column 9 of gff file
-  maker.gff.col9 <- maker.gff[,9]
-  pattern <- "_AED=([0-9].[0-9][0-9])"
-  maker.gff.AED=c()
-  index=1
-  for (i in 1:length(maker.gff.col9)){
-    maker.gff.match <- regexec(pattern, as.character(maker.gff[i,9]))
-    if (maker.gff.match[[1]][1] != -1){
-      maker.gff.AED[index]<-regmatches(as.character(maker.gff[i,9]),maker.gff.match)[[1]][2]
-      index = index + 1
-    }
-  }
-  return (maker.gff.AED)
-}
-
-
-2.2	Distribution of AED score presenting Gene Prediction quality 
-
-R installed function ecdf{} was used to perform cumulative distribution of the AED scores from the whole genome. Subsequently, plot{} function were used to demonstrate the differences of gene prediction qualities from two annotated genome.
-
-#Run AEDscore function with new GFF3 and preexisting GFF3 files
-maker2.new.AED <- AEDscore(‘maker2_second_run.all.functional.ipr.gff’)
-maker2.legacy.AED <- AEDscore(‘maker2_legacy.all.gff’)
-
-#ECDF{} FUNCTION WAS USED TO DO CUMULATIGVE DISTRIBUTION
-maker2.new.AED.plot<-ecdf(maker2.new.AED)
-maker2.legacy.AED.plot <- ecdf(maker2.legacy.AED)
-
-#RUN PLOT{} TO VISULIZE THE DIFFERENCE OF TWO ANNOTATIONS’ QUALITY
-plot(maker2.new.AED.plot, pch=. ,col = "red", main="Cumulative distribution of AED Value", xlab ="AED value", ylab="Cumulative fraction of annotation", xlim=(0:1), ylim=(0:1))
-lines(maker2.legacy.AED.plot,col='green',pch=.)
-legend('bottomright',legend=c(‘maker2.new.AED.plot’,‘maker2.legacy.AED.plot’), lty=1, col = c('red','green'), bty='n',cex=.75)
+ 
