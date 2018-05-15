@@ -24,6 +24,7 @@ The scond step is to run the InterproScan append the Interpro conserved domains 
 
 # 1.3 Running PEPG.py
 The last step is to run the PEPG.py, which is designed  to compare the prior annotation and the newer annotation in the angles of the accuracy, gene's structure and function. It requires you to provides the two GFF files from the two annotations.
+
 #Commandline: python PEPG.py -g1 prior.annotation.gff -g2 new.annotation.gff
 
 
